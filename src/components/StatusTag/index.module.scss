@@ -1,0 +1,36 @@
+@use '@/styles/variables.scss' as *;
+
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+}
+
+.pending {
+  background: rgba(255, 125, 0, 0.1);
+  color: $color-pending;
+}
+
+.applied {
+  background: rgba(22, 93, 255, 0.1);
+  color: $color-progress;
+}
+
+.interview {
+  background: rgba(91, 111, 255, 0.1);
+  color: $color-primary;
+}
+
+.offer {
+  background: rgba(0, 180, 42, 0.1);
+  color: $color-success;
+}
+
+.rejected {
+  background: rgba(245, 63, 63, 0.1);
+  color: $color-rejected;
+}

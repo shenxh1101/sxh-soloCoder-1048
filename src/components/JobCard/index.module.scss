@@ -1,0 +1,96 @@
+@use '@/styles/variables.scss' as *;
+
+.jobCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 4rpx 20rpx rgba(91, 111, 255, 0.12);
+  }
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-md;
+}
+
+.companyInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.company {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.position {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  margin-top: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.cardBody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  white-space: nowrap;
+}
+
+.cityTag {
+  background: rgba(15, 198, 194, 0.1);
+  color: $color-city;
+}
+
+.channelTag {
+  background: rgba(91, 111, 255, 0.08);
+  color: $color-primary;
+}
+
+.salaryTag {
+  background: rgba(114, 46, 209, 0.1);
+  color: $color-salary;
+}
+
+.industryTag {
+  background: rgba(20, 201, 201, 0.1);
+  color: $color-industry;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-divider;
+}
+
+.dateInfo {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.interviewCount {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}

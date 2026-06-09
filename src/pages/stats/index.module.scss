@@ -1,0 +1,193 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.section {
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+}
+
+.conversionRate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+  padding: $spacing-lg;
+  background: linear-gradient(135deg, rgba(91, 111, 255, 0.1) 0%, rgba(124, 139, 255, 0.1) 100%);
+  border-radius: $radius-lg;
+  border: 2rpx solid rgba(91, 111, 255, 0.2);
+}
+
+.rateInfo {
+  flex: 1;
+}
+
+.rateLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.rateValue {
+  font-size: 48rpx;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  line-height: 1.2;
+}
+
+.rateDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.rateIcon {
+  font-size: 80rpx;
+  margin-left: $spacing-lg;
+}
+
+.funnelChart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.funnelItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72rpx;
+  padding: 0 $spacing-md;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-md;
+  transition: all $transition-base;
+}
+
+.funnelStage {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+}
+
+.funnelCount {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+  opacity: 0.9;
+}
+
+.weeklyChart {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: flex-end;
+  height: 240rpx;
+  padding: $spacing-md 0;
+}
+
+.weeklyBarWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.weeklyBar {
+  width: 100%;
+  background: linear-gradient(180deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-sm $radius-sm 0 0;
+  min-height: 8rpx;
+  transition: all $transition-base;
+}
+
+.weeklyValue {
+  font-size: 20rpx;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+  margin: 8rpx 0 4rpx;
+}
+
+.weeklyLabel {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+}
+
+.distributionItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.distributionLabel {
+  width: 120rpx;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+.distributionBar {
+  flex: 1;
+  height: 24rpx;
+  background: $color-bg-page;
+  border-radius: $radius-round;
+  overflow: hidden;
+  margin: 0 $spacing-md;
+}
+
+.distributionFill {
+  height: 100%;
+  border-radius: $radius-round;
+  transition: width $transition-base;
+}
+
+.cityFill {
+  background: linear-gradient(90deg, $color-city 0%, #5EEAD4 100%);
+}
+
+.industryFill {
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.distributionValue {
+  width: 60rpx;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.twoColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+}

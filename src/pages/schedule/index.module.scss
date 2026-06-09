@@ -1,0 +1,219 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+.weekCalendar {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+}
+
+.weekDays {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dayItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-sm 0;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.selected {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.weekday {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 8rpx;
+}
+
+.selected .weekday {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dateNumber {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  line-height: 1.2;
+}
+
+.selected .dateNumber {
+  color: $color-text-white;
+}
+
+.todayBadge {
+  font-size: 20rpx;
+  color: $color-primary;
+  background: rgba(91, 111, 255, 0.1);
+  padding: 2rpx 12rpx;
+  border-radius: $radius-round;
+  margin-top: 6rpx;
+}
+
+.selected .todayBadge {
+  color: $color-text-white;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hasEvent {
+  position: relative;
+}
+
+.hasEvent::after {
+  content: '';
+  position: absolute;
+  bottom: 8rpx;
+  width: 8rpx;
+  height: 8rpx;
+  background: $color-primary;
+  border-radius: $radius-round;
+}
+
+.selected.hasEvent::after {
+  background: $color-text-white;
+}
+
+.dateHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.dateTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.scheduleCount {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.weekOverview {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-top: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+}
+
+.overviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.overviewTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.overviewSubtitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.weekBars {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: flex-end;
+  height: 120rpx;
+  margin-bottom: $spacing-md;
+}
+
+.dayBarWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.dayBar {
+  width: 100%;
+  background: linear-gradient(180deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-sm $radius-sm 0 0;
+  min-height: 8rpx;
+  transition: all $transition-base;
+}
+
+.barLabel {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-divider;
+}
+
+.progressText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-right: $spacing-md;
+  white-space: nowrap;
+}
+
+.progressBar {
+  flex: 1;
+  height: 12rpx;
+  background: $color-bg-page;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  transition: width $transition-base;
+}
+
+.fab {
+  position: fixed;
+  right: $page-padding;
+  bottom: 120rpx;
+  width: 112rpx;
+  height: 112rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  box-shadow: 0 4rpx 20rpx rgba(91, 111, 255, 0.4);
+  z-index: 100;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+.fabIcon {
+  font-size: 48rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}

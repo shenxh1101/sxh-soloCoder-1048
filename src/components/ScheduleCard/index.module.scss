@@ -1,0 +1,129 @@
+@use '@/styles/variables.scss' as *;
+
+.scheduleCard {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.completed {
+  opacity: 0.6;
+}
+
+.timeColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: $spacing-lg;
+  border-right: 2rpx solid $color-divider;
+  min-width: 120rpx;
+}
+
+.time {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.relativeDate {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.contentColumn {
+  flex: 1;
+  padding-left: $spacing-lg;
+  min-width: 0;
+}
+
+.typeTag {
+  display: inline-flex;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  margin-bottom: $spacing-sm;
+  white-space: nowrap;
+}
+
+.interview {
+  background: rgba(91, 111, 255, 0.1);
+  color: $color-primary;
+}
+
+.written {
+  background: rgba(22, 93, 255, 0.1);
+  color: $color-progress;
+}
+
+.meeting {
+  background: rgba(114, 46, 209, 0.1);
+  color: $color-salary;
+}
+
+.deadline {
+  background: rgba(245, 63, 63, 0.1);
+  color: $color-rejected;
+}
+
+.jobInfo {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.company {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-sm;
+  @include text-ellipsis;
+}
+
+.dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: $radius-round;
+  background: $color-text-tertiary;
+  margin-right: $spacing-xs;
+}
+
+.checkbox {
+  width: 48rpx;
+  height: 48rpx;
+  border: 3rpx solid $color-border;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: $spacing-md;
+  flex-shrink: 0;
+}
+
+.checked {
+  background: $color-primary;
+  border-color: $color-primary;
+}
+
+.checkIcon {
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+}

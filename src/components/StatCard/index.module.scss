@@ -1,0 +1,38 @@
+@use '@/styles/variables.scss' as *;
+
+.statCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+  flex: 1;
+  min-width: 0;
+}
+
+.value {
+  font-size: 56rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+  margin-bottom: $spacing-xs;
+}
+
+.primary {
+  color: $color-primary;
+}
+
+.success {
+  color: $color-success;
+}
+
+.pending {
+  color: $color-pending;
+}
+
+.rejected {
+  color: $color-rejected;
+}
+
+.label {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}

@@ -1,0 +1,95 @@
+@use '@/styles/variables.scss' as *;
+
+.resumeCard {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.iconColumn {
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-lg;
+  flex-shrink: 0;
+}
+
+.icon {
+  font-size: 48rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.contentColumn {
+  flex: 1;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.name {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.version {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  background: rgba(91, 111, 255, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  white-space: nowrap;
+  margin-left: $spacing-sm;
+}
+
+.target {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  @include text-ellipsis;
+}
+
+.description {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  @include text-ellipsis-multi(2);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-divider;
+}
+
+.date {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.usedCount {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
