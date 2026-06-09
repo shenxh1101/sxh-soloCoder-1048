@@ -12,10 +12,28 @@ import type { JobStatus, InterviewRecord, InterviewRound, Schedule } from '@/typ
 import dayjs from 'dayjs';
 
 const JobDetailPage: React.FC = () => {
-  const { currentJob, updateJobStatus, addInterview, updateJob, addSchedule, resumes } = useStore();
+  const { currentJob, jobs, setCurrentJob, updateJobStatus, addInterview, updateJob, addSchedule, resumes } = useStore();
   const [localStatus, setLocalStatus] = useState<JobStatus>('pending');
   const [showInterviewModal, setShowInterviewModal] = useState(false);
   const [showResumePicker, setShowResumePicker] = useState(false);
+  const [jobLoaded, setJobLoaded] = useState(false);
+
+  useEffect(() => {
+    const pages = Taro.getCurrentPages();
+    const currentPage = pages[pages.length - 1];
+    const options = (currentPage as any).options || {};
+    const urlJobId = options.jobId;
+
+    if (urlJobId) {
+      if (!currentJob || currentJob.id !== urlJobId) {
+        const foundJob = jobs.find(j => j.id === urlJobId);
+        if (foundJob) {
+          setCurrentJob(foundJob);
+        }
+      }
+    }
+    setJobLoaded(true);
+  }, [jobs, currentJob, setCurrentJob]);
 
   useEffect(() => {
     if (currentJob) {
@@ -35,6 +53,7 @@ const JobDetailPage: React.FC = () => {
   });
 
   const handleStatusChange = (status: JobStatus) => {
+    if (!currentJob) return;
     console.log('[JobDetail] 切换状态:', status);
     setLocalStatus(status);
     updateJobStatus(currentJob.id, status);
@@ -154,12 +173,12 @@ const JobDetailPage: React.FC = () => {
     Taro.showToast({ title: '简历版本已更新', icon: 'success' });
   };
 
-  if (!currentJob) {
+  if (!jobLoaded || !currentJob) {
     return (
       <View className={styles.page}>
         <View className="container">
           <View className="card">
-            <Text style={{ color: '#86909C' }}>未找到岗位信息</Text>
+            <Text style={{ color: '#86909C' }}>{!jobLoaded ? '加载中...' : '未找到岗位信息'}</Text>
           </View>
         </View>
       </View>

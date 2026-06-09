@@ -19,7 +19,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     console.log('[JobCard] 点击岗位:', job.company, job.position);
     setCurrentJob(job);
     Taro.navigateTo({
-      url: '/pages/job-detail/index'
+      url: `/pages/job-detail/index?jobId=${job.id}`
     });
   };
 
