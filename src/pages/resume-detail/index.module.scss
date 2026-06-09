@@ -2,29 +2,232 @@
 
 .page {
   min-height: 100vh;
+  padding-bottom: 40rpx;
+  background: $color-bg-page;
+}
+
+.header {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: $spacing-xl $page-padding $spacing-xl * 2;
+  margin: 0 (-$page-padding) $spacing-lg;
+  border-radius: 0 0 $radius-xl $radius-xl;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.resumeIcon {
+  width: 140rpx;
+  height: 140rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-xl;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  padding: $spacing-xl;
-}
-
-.icon {
-  font-size: 160rpx;
-  margin-bottom: $spacing-lg;
-  opacity: 0.3;
-}
-
-.title {
-  font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
-  color: $color-text-primary;
   margin-bottom: $spacing-md;
 }
 
-.desc {
-  font-size: $font-size-md;
-  color: $color-text-tertiary;
+.resumeIconText {
+  font-size: 80rpx;
+}
+
+.resumeName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+  margin-bottom: $spacing-md;
+}
+
+.resumeMeta {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.versionTag {
+  padding: 6rpx 20rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  color: $color-text-white;
+}
+
+.industryTag {
+  padding: 6rpx 20rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  color: $color-text-white;
+}
+
+.statsCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+}
+
+.statItem {
+  flex: 1;
   text-align: center;
-  line-height: 1.6;
+}
+
+.statValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.statDivider {
+  width: 1rpx;
+  height: 60rpx;
+  background: $color-divider;
+}
+
+.infoCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.section {
+  margin-top: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+}
+
+.sectionIcon {
+  margin-right: $spacing-sm;
+}
+
+.descText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.8;
+}
+
+.recordItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md 0;
+}
+
+.recordCompany {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.recordPosition {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.recordDate {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.recordDivider {
+  height: 1rpx;
+  background: $color-divider;
+}
+
+.emptyRecord {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2rpx 12rpx rgba(91, 111, 255, 0.08);
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.emptyDesc {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.actionBtn {
+  margin-top: $spacing-xl;
+  height: 96rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(91, 111, 255, 0.3);
+  transition: all 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.actionBtnText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
 }

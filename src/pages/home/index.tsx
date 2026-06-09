@@ -5,24 +5,30 @@ import styles from './index.module.scss';
 import ScheduleCard from '@/components/ScheduleCard';
 import JobCard from '@/components/JobCard';
 import { useStore } from '@/store/useStore';
-import { isToday, isTomorrow } from '@/utils';
+
 import dayjs from 'dayjs';
 
 const HomePage: React.FC = () => {
   const { jobs, schedules, stats } = useStore();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const todaySchedules = useMemo(() => {
-    return schedules.filter((s) => isToday(s.date) && !s.isCompleted);
-  }, [schedules]);
-
-  const tomorrowSchedules = useMemo(() => {
-    return schedules.filter((s) => isTomorrow(s.date) && !s.isCompleted);
-  }, [schedules]);
-
   const pendingSchedules = useMemo(() => {
-    return [...todaySchedules, ...tomorrowSchedules].slice(0, 3);
-  }, [todaySchedules, tomorrowSchedules]);
+    const now = dayjs();
+    const endOfWeek = now.endOf('week');
+    return schedules
+      .filter((s) => {
+        if (s.isCompleted) return false;
+        const scheduleDate = dayjs(s.date);
+        return scheduleDate.isAfter(now.subtract(1, 'day')) &&
+               scheduleDate.isBefore(endOfWeek.add(1, 'day'));
+      })
+      .sort((a, b) => {
+        const dateCompare = a.date.localeCompare(b.date);
+        if (dateCompare !== 0) return dateCompare;
+        return a.time.localeCompare(b.time);
+      })
+      .slice(0, 5);
+  }, [schedules]);
 
   const recentJobs = useMemo(() => {
     return [...jobs]
