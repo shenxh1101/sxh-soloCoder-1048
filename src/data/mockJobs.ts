@@ -31,7 +31,7 @@ export const mockJobs: Job[] = [
       },
       {
         id: 'i2',
-        round: 'first',
+        round: 'tech',
         roundName: '技术一面',
         date: '2026-06-08',
         time: '10:30',
@@ -94,7 +94,7 @@ export const mockJobs: Job[] = [
       },
       {
         id: 'i4',
-        round: 'first',
+        round: 'tech',
         roundName: '技术一面',
         date: '2026-05-28',
         time: '10:00',
@@ -196,7 +196,7 @@ export const mockJobs: Job[] = [
       },
       {
         id: 'i8',
-        round: 'first',
+        round: 'tech',
         roundName: '技术一面',
         date: '2026-06-06',
         time: '15:30',
@@ -207,7 +207,7 @@ export const mockJobs: Job[] = [
       },
       {
         id: 'i9',
-        round: 'second',
+        round: 'tech',
         roundName: '技术二面',
         date: '2026-06-10',
         time: '10:00',
@@ -304,7 +304,7 @@ export const mockJobs: Job[] = [
       },
       {
         id: 'i11',
-        round: 'first',
+        round: 'tech',
         roundName: '技术一面',
         date: '2026-06-03',
         time: '10:00',

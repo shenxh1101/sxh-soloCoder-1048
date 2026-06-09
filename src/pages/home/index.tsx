@@ -9,7 +9,7 @@ import { useStore } from '@/store/useStore';
 import dayjs from 'dayjs';
 
 const HomePage: React.FC = () => {
-  const { jobs, schedules, stats } = useStore();
+  const { jobs, schedules, stats, setPendingScheduleDate } = useStore();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const pendingSchedules = useMemo(() => {
@@ -46,13 +46,23 @@ const HomePage: React.FC = () => {
   }, [jobs]);
 
   const weekTodoCount = useMemo(() => {
-    const weekStart = dayjs().startOf('week');
-    const weekEnd = dayjs().endOf('week');
+    const now = dayjs();
+    const weekStart = now.startOf('week');
+    const weekEnd = now.endOf('week');
+    const todayStr = now.format('YYYY-MM-DD');
+    const currentTimeStr = now.format('HH:mm');
     return schedules.filter(
-      (s) =>
-        !s.isCompleted &&
-        dayjs(s.date).isAfter(weekStart) &&
-        dayjs(s.date).isBefore(weekEnd)
+      (s) => {
+        if (s.isCompleted) return false;
+        const scheduleDate = dayjs(s.date);
+        const isInRange = scheduleDate.isAfter(weekStart.subtract(1, 'day')) &&
+                          scheduleDate.isBefore(weekEnd.add(1, 'day'));
+        if (!isInRange) return false;
+        if (s.date === todayStr && s.time < currentTimeStr) {
+          return false;
+        }
+        return true;
+      }
     ).length;
   }, [schedules]);
 
@@ -194,7 +204,7 @@ const HomePage: React.FC = () => {
                 <View
                   key={schedule.id}
                   onClick={() => {
-                    Taro.eventCenter.trigger('selectScheduleDate', schedule.date);
+                    setPendingScheduleDate(schedule.date);
                     Taro.switchTab({ url: '/pages/schedule/index' });
                   }}
                 >

@@ -1,5 +1,5 @@
 export type JobStatus = 'pending' | 'applied' | 'interview' | 'offer' | 'rejected';
-export type InterviewRound = 'phone' | 'first' | 'second' | 'third' | 'hr' | 'offer';
+export type InterviewRound = 'phone' | 'tech' | 'hr' | 'leader' | 'final' | 'onsite';
 export type ScheduleType = 'interview' | 'written' | 'meeting' | 'deadline';
 
 export interface Contact {

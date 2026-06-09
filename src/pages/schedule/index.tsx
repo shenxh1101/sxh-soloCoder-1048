@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, ScrollView, Input, Textarea, Picker } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
@@ -12,7 +12,7 @@ import type { ScheduleType, Schedule } from '@/types';
 import dayjs from 'dayjs';
 
 const SchedulePage: React.FC = () => {
-  const { schedules, jobs, addSchedule, updateSchedule, deleteSchedule, toggleScheduleComplete } = useStore();
+  const { schedules, jobs, addSchedule, updateSchedule, deleteSchedule, toggleScheduleComplete, pendingScheduleDate, setPendingScheduleDate } = useStore();
   const weekDates = getWeekDates();
   const [selectedDate, setSelectedDate] = useState(
     weekDates.find((d) => d.isToday)?.date || weekDates[0].date
@@ -84,7 +84,11 @@ const SchedulePage: React.FC = () => {
 
   const maxCount = Math.max(...weekStats.map((s) => s.count), 1);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (pendingScheduleDate) {
+      setSelectedDate(pendingScheduleDate);
+      setPendingScheduleDate(null);
+    }
     const handleSelectDate = (date: string) => {
       setSelectedDate(date);
     };
@@ -92,7 +96,7 @@ const SchedulePage: React.FC = () => {
     return () => {
       Taro.eventCenter.off('selectScheduleDate', handleSelectDate);
     };
-  }, []);
+  }, [pendingScheduleDate, setPendingScheduleDate]);
 
   const handleAddSchedule = () => {
     console.log('[SchedulePage] 新增日程');

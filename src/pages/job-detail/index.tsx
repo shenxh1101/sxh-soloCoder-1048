@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Input, Textarea, Picker, Switch } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
@@ -13,9 +13,15 @@ import dayjs from 'dayjs';
 
 const JobDetailPage: React.FC = () => {
   const { currentJob, updateJobStatus, addInterview, updateJob, addSchedule, resumes } = useStore();
-  const [localStatus, setLocalStatus] = useState<JobStatus>(currentJob?.status || 'pending');
+  const [localStatus, setLocalStatus] = useState<JobStatus>('pending');
   const [showInterviewModal, setShowInterviewModal] = useState(false);
   const [showResumePicker, setShowResumePicker] = useState(false);
+
+  useEffect(() => {
+    if (currentJob) {
+      setLocalStatus(currentJob.status);
+    }
+  }, [currentJob]);
   const [interviewForm, setInterviewForm] = useState({
     round: 'tech' as InterviewRound,
     roundName: '',
@@ -27,18 +33,6 @@ const JobDetailPage: React.FC = () => {
     notes: '',
     createSchedule: true
   });
-
-  if (!currentJob) {
-    return (
-      <View className={styles.page}>
-        <View className="container">
-          <View className="card">
-            <Text style={{ color: '#86909C' }}>未找到岗位信息</Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
 
   const handleStatusChange = (status: JobStatus) => {
     console.log('[JobDetail] 切换状态:', status);
@@ -159,6 +153,18 @@ const JobDetailPage: React.FC = () => {
     setShowResumePicker(false);
     Taro.showToast({ title: '简历版本已更新', icon: 'success' });
   };
+
+  if (!currentJob) {
+    return (
+      <View className={styles.page}>
+        <View className="container">
+          <View className="card">
+            <Text style={{ color: '#86909C' }}>未找到岗位信息</Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <ScrollView className={styles.page} scrollY>

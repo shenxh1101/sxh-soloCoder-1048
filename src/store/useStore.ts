@@ -109,8 +109,10 @@ interface AppState {
   stats: StatData;
   currentJob: Job | null;
   currentResume: Resume | null;
+  pendingScheduleDate: string | null;
   setCurrentJob: (job: Job | null) => void;
   setCurrentResume: (resume: Resume | null) => void;
+  setPendingScheduleDate: (date: string | null) => void;
   updateJobStatus: (jobId: string, status: Job['status']) => void;
   updateJob: (jobId: string, updates: Partial<Job>) => void;
   toggleScheduleComplete: (scheduleId: string) => void;
@@ -130,9 +132,11 @@ export const useStore = create<AppState>((set, get) => ({
   stats: calculateStats(initialData.jobs),
   currentJob: null,
   currentResume: null,
+  pendingScheduleDate: null,
 
   setCurrentJob: (job) => set({ currentJob: job }),
   setCurrentResume: (resume) => set({ currentResume: resume }),
+  setPendingScheduleDate: (date) => set({ pendingScheduleDate: date }),
 
   updateJobStatus: (jobId, status) =>
     set((state) => {
