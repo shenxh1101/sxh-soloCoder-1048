@@ -9,9 +9,10 @@ import { typeMap } from '@/data/mockSchedules';
 
 interface ScheduleCardProps {
   schedule: Schedule;
+  onClick?: () => void;
 }
 
-const ScheduleCard: React.FC<ScheduleCardProps> = ({ schedule }) => {
+const ScheduleCard: React.FC<ScheduleCardProps> = ({ schedule, onClick }) => {
   const toggleScheduleComplete = useStore((state) => state.toggleScheduleComplete);
 
   const handleToggle = (e) => {
@@ -20,8 +21,17 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({ schedule }) => {
     toggleScheduleComplete(schedule.id);
   };
 
+  const handleCardClick = (e) => {
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
-    <View className={classnames(styles.scheduleCard, schedule.isCompleted && styles.completed)}>
+    <View
+      className={classnames(styles.scheduleCard, schedule.isCompleted && styles.completed)}
+      onClick={handleCardClick}
+    >
       <View className={styles.timeColumn}>
         <Text className={styles.time}>{schedule.time}</Text>
         <Text className={styles.relativeDate}>{getRelativeDate(schedule.date)}</Text>

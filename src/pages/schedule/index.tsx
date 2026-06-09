@@ -8,17 +8,20 @@ import EmptyState from '@/components/EmptyState';
 import { useStore } from '@/store/useStore';
 import { getWeekDates, generateId } from '@/utils';
 import { typeMap } from '@/data/mockSchedules';
-import type { ScheduleType } from '@/types';
+import type { ScheduleType, Schedule } from '@/types';
 import dayjs from 'dayjs';
 
 const SchedulePage: React.FC = () => {
-  const { schedules, jobs, addSchedule } = useStore();
+  const { schedules, jobs, addSchedule, updateSchedule, deleteSchedule, toggleScheduleComplete } = useStore();
   const weekDates = getWeekDates();
   const [selectedDate, setSelectedDate] = useState(
     weekDates.find((d) => d.isToday)?.date || weekDates[0].date
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [scheduleForm, setScheduleForm] = useState({
     type: 'interview' as ScheduleType,
     jobId: '',
@@ -81,6 +84,16 @@ const SchedulePage: React.FC = () => {
 
   const maxCount = Math.max(...weekStats.map((s) => s.count), 1);
 
+  React.useEffect(() => {
+    const handleSelectDate = (date: string) => {
+      setSelectedDate(date);
+    };
+    Taro.eventCenter.on('selectScheduleDate', handleSelectDate);
+    return () => {
+      Taro.eventCenter.off('selectScheduleDate', handleSelectDate);
+    };
+  }, []);
+
   const handleAddSchedule = () => {
     console.log('[SchedulePage] 新增日程');
     setScheduleForm({
@@ -96,6 +109,100 @@ const SchedulePage: React.FC = () => {
 
   const updateScheduleField = (field: string, value: any) => {
     setScheduleForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleScheduleClick = (schedule: Schedule) => {
+    setSelectedSchedule(schedule);
+    setScheduleForm({
+      type: schedule.type,
+      jobId: schedule.jobId,
+      date: schedule.date,
+      time: schedule.time,
+      location: schedule.location,
+      notes: schedule.notes
+    });
+    setIsEditing(false);
+    setShowDetailModal(true);
+  };
+
+  const handleEditSchedule = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    if (selectedSchedule) {
+      setScheduleForm({
+        type: selectedSchedule.type,
+        jobId: selectedSchedule.jobId,
+        date: selectedSchedule.date,
+        time: selectedSchedule.time,
+        location: selectedSchedule.location,
+        notes: selectedSchedule.notes
+      });
+    }
+    setIsEditing(false);
+  };
+
+  const handleUpdateSchedule = () => {
+    if (!selectedSchedule || !scheduleForm.jobId) {
+      Taro.showToast({ title: '请选择关联岗位', icon: 'none' });
+      return;
+    }
+
+    const selectedJob = jobs.find((j) => j.id === scheduleForm.jobId);
+    if (!selectedJob) return;
+
+    const oldDate = selectedSchedule.date;
+    const newDate = scheduleForm.date;
+
+    updateSchedule(selectedSchedule.id, {
+      jobId: scheduleForm.jobId,
+      jobName: selectedJob.position,
+      company: selectedJob.company,
+      type: scheduleForm.type,
+      typeName: typeMap[scheduleForm.type].label,
+      date: scheduleForm.date,
+      time: scheduleForm.time,
+      location: scheduleForm.location.trim(),
+      notes: scheduleForm.notes.trim()
+    });
+
+    setShowDetailModal(false);
+    setIsEditing(false);
+    setSelectedSchedule(null);
+
+    if (oldDate !== newDate) {
+      setSelectedDate(newDate);
+      Taro.showToast({ title: '已更新并切换日期', icon: 'success' });
+    } else {
+      Taro.showToast({ title: '更新成功', icon: 'success' });
+    }
+  };
+
+  const handleDeleteSchedule = () => {
+    if (!selectedSchedule) return;
+
+    Taro.showModal({
+      title: '确认删除',
+      content: '确定要删除这个日程吗？',
+      success: (res) => {
+        if (res.confirm && selectedSchedule) {
+          deleteSchedule(selectedSchedule.id);
+          setShowDetailModal(false);
+          setSelectedSchedule(null);
+          Taro.showToast({ title: '已删除', icon: 'success' });
+        }
+      }
+    });
+  };
+
+  const handleToggleCompleteFromDetail = () => {
+    if (!selectedSchedule) return;
+    toggleScheduleComplete(selectedSchedule.id);
+    setSelectedSchedule({
+      ...selectedSchedule,
+      isCompleted: !selectedSchedule.isCompleted
+    });
   };
 
   const handleSaveSchedule = () => {
@@ -123,7 +230,13 @@ const SchedulePage: React.FC = () => {
 
     addSchedule(newSchedule);
     setShowAddModal(false);
-    Taro.showToast({ title: '添加成功', icon: 'success' });
+
+    if (scheduleForm.date !== selectedDate) {
+      setSelectedDate(scheduleForm.date);
+      Taro.showToast({ title: '已添加并切换日期', icon: 'success' });
+    } else {
+      Taro.showToast({ title: '添加成功', icon: 'success' });
+    }
   };
 
   const typeOptions = ['interview', 'written', 'meeting', 'deadline'] as ScheduleType[];
@@ -184,7 +297,11 @@ const SchedulePage: React.FC = () => {
 
           {selectedDateSchedules.length > 0 ? (
             selectedDateSchedules.map((schedule) => (
-              <ScheduleCard key={schedule.id} schedule={schedule} />
+              <ScheduleCard
+                key={schedule.id}
+                schedule={schedule}
+                onClick={() => handleScheduleClick(schedule)}
+              />
             ))
           ) : (
             <EmptyState icon="📅" text="今天没有日程安排" />
@@ -343,6 +460,186 @@ const SchedulePage: React.FC = () => {
               <View className={styles.confirmBtn} onClick={handleSaveSchedule}>
                 <Text>保存</Text>
               </View>
+            </View>
+          </View>
+        </View>
+      )}
+
+      {showDetailModal && selectedSchedule && (
+        <View className={styles.modalOverlay} onClick={() => setShowDetailModal(false)}>
+          <View className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <View className={styles.modalHeader}>
+              <Text className={styles.modalTitle}>
+                {isEditing ? '编辑日程' : '日程详情'}
+              </Text>
+              <View className={styles.modalClose} onClick={() => setShowDetailModal(false)}>
+                <Text>×</Text>
+              </View>
+            </View>
+
+            <ScrollView className={styles.modalBody} scrollY>
+              {isEditing ? (
+                <>
+                  <View className={styles.formItem}>
+                    <Text className={styles.label}>日程类型</Text>
+                    <Picker
+                      mode="selector"
+                      range={typeLabels}
+                      value={typeOptions.indexOf(scheduleForm.type)}
+                      onChange={(e) => updateScheduleField('type', typeOptions[e.detail.value])}
+                    >
+                      <View className={styles.picker}>
+                        <Text style={{ color: typeMap[scheduleForm.type].color }}>
+                          {typeMap[scheduleForm.type].label}
+                        </Text>
+                        <Text className={styles.pickerArrow}>›</Text>
+                      </View>
+                    </Picker>
+                  </View>
+
+                  <View className={styles.formItem}>
+                    <Text className={styles.label}>关联岗位 <Text className={styles.required}>*</Text></Text>
+                    <Picker
+                      mode="selector"
+                      range={jobOptions}
+                      value={jobs.findIndex((j) => j.id === scheduleForm.jobId)}
+                      onChange={(e) => updateScheduleField('jobId', jobs[e.detail.value].id)}
+                    >
+                      <View className={classnames(styles.picker, !scheduleForm.jobId && styles.placeholder)}>
+                        <Text>{scheduleForm.jobId ? jobOptions[jobs.findIndex((j) => j.id === scheduleForm.jobId)] : '请选择关联岗位'}</Text>
+                        <Text className={styles.pickerArrow}>›</Text>
+                      </View>
+                    </Picker>
+                  </View>
+
+                  <View className={styles.formRow}>
+                    <View className={styles.formItem} style={{ flex: 1, marginRight: 20 }}>
+                      <Text className={styles.label}>日期</Text>
+                      <Picker
+                        mode="date"
+                        value={scheduleForm.date}
+                        onChange={(e) => updateScheduleField('date', e.detail.value)}
+                      >
+                        <View className={styles.picker}>
+                          <Text>{scheduleForm.date}</Text>
+                          <Text className={styles.pickerArrow}>›</Text>
+                        </View>
+                      </Picker>
+                    </View>
+
+                    <View className={styles.formItem} style={{ flex: 1 }}>
+                      <Text className={styles.label}>时间</Text>
+                      <Picker
+                        mode="selector"
+                        range={timeOptions}
+                        value={timeOptions.indexOf(scheduleForm.time)}
+                        onChange={(e) => updateScheduleField('time', timeOptions[e.detail.value])}
+                      >
+                        <View className={styles.picker}>
+                          <Text>{scheduleForm.time}</Text>
+                          <Text className={styles.pickerArrow}>›</Text>
+                        </View>
+                      </Picker>
+                    </View>
+                  </View>
+
+                  <View className={styles.formItem}>
+                    <Text className={styles.label}>地点</Text>
+                    <Input
+                      className={styles.input}
+                      placeholder="请输入地点"
+                      value={scheduleForm.location}
+                      onInput={(e) => updateScheduleField('location', e.detail.value)}
+                    />
+                  </View>
+
+                  <View className={styles.formItem}>
+                    <Text className={styles.label}>备注</Text>
+                    <Textarea
+                      className={styles.textarea}
+                      placeholder="备注信息"
+                      value={scheduleForm.notes}
+                      onInput={(e) => updateScheduleField('notes', e.detail.value)}
+                      maxlength={200}
+                    />
+                  </View>
+                </>
+              ) : (
+                <>
+                  <View className={styles.detailItem}>
+                    <Text className={styles.detailLabel}>类型</Text>
+                    <View className={classnames(styles.typeTag, styles[selectedSchedule.type])}>
+                      <Text>{selectedSchedule.typeName}</Text>
+                    </View>
+                  </View>
+
+                  <View className={styles.detailItem}>
+                    <Text className={styles.detailLabel}>关联岗位</Text>
+                    <View>
+                      <Text className={styles.detailValue}>{selectedSchedule.jobName}</Text>
+                      <Text className={styles.detailSubValue}>{selectedSchedule.company}</Text>
+                    </View>
+                  </View>
+
+                  <View className={styles.detailItem}>
+                    <Text className={styles.detailLabel}>日期时间</Text>
+                    <Text className={styles.detailValue}>
+                      {selectedSchedule.date} {selectedSchedule.time}
+                    </Text>
+                  </View>
+
+                  {selectedSchedule.location && (
+                    <View className={styles.detailItem}>
+                      <Text className={styles.detailLabel}>地点</Text>
+                      <Text className={styles.detailValue}>{selectedSchedule.location}</Text>
+                    </View>
+                  )}
+
+                  {selectedSchedule.notes && (
+                    <View className={styles.detailItem}>
+                      <Text className={styles.detailLabel}>备注</Text>
+                      <Text className={styles.detailValue}>{selectedSchedule.notes}</Text>
+                    </View>
+                  )}
+
+                  <View className={styles.detailItem}>
+                    <Text className={styles.detailLabel}>状态</Text>
+                    <View
+                      className={classnames(
+                        styles.statusTag,
+                        selectedSchedule.isCompleted ? styles.completedStatus : styles.pendingStatus
+                      )}
+                    >
+                      <Text>{selectedSchedule.isCompleted ? '已完成' : '待完成'}</Text>
+                    </View>
+                  </View>
+                </>
+              )}
+            </ScrollView>
+
+            <View className={styles.modalFooter}>
+              {isEditing ? (
+                <>
+                  <View className={styles.cancelBtn} onClick={handleCancelEdit}>
+                    <Text>取消</Text>
+                  </View>
+                  <View className={styles.confirmBtn} onClick={handleUpdateSchedule}>
+                    <Text>保存</Text>
+                  </View>
+                </>
+              ) : (
+                <>
+                  <View className={styles.secondaryBtn} onClick={handleDeleteSchedule}>
+                    <Text>删除</Text>
+                  </View>
+                  <View className={styles.secondaryBtn} onClick={handleToggleCompleteFromDetail}>
+                    <Text>{selectedSchedule.isCompleted ? '取消完成' : '标记完成'}</Text>
+                  </View>
+                  <View className={styles.confirmBtn} onClick={handleEditSchedule}>
+                    <Text>编辑</Text>
+                  </View>
+                </>
+              )}
             </View>
           </View>
         </View>

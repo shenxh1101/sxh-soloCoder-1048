@@ -15,12 +15,21 @@ const HomePage: React.FC = () => {
   const pendingSchedules = useMemo(() => {
     const now = dayjs();
     const endOfWeek = now.endOf('week');
+    const todayStr = now.format('YYYY-MM-DD');
+    const currentTimeStr = now.format('HH:mm');
+    
     return schedules
       .filter((s) => {
         if (s.isCompleted) return false;
         const scheduleDate = dayjs(s.date);
-        return scheduleDate.isAfter(now.subtract(1, 'day')) &&
-               scheduleDate.isBefore(endOfWeek.add(1, 'day'));
+        const isInRange = scheduleDate.isAfter(now.subtract(1, 'day')) &&
+                          scheduleDate.isBefore(endOfWeek.add(1, 'day'));
+        if (!isInRange) return false;
+        
+        if (s.date === todayStr && s.time < currentTimeStr) {
+          return false;
+        }
+        return true;
       })
       .sort((a, b) => {
         const dateCompare = a.date.localeCompare(b.date);
@@ -182,7 +191,15 @@ const HomePage: React.FC = () => {
             </View>
             {pendingSchedules.length > 0 ? (
               pendingSchedules.map((schedule) => (
-                <ScheduleCard key={schedule.id} schedule={schedule} />
+                <View
+                  key={schedule.id}
+                  onClick={() => {
+                    Taro.eventCenter.trigger('selectScheduleDate', schedule.date);
+                    Taro.switchTab({ url: '/pages/schedule/index' });
+                  }}
+                >
+                  <ScheduleCard schedule={schedule} />
+                </View>
               ))
             ) : (
               <View className="card">

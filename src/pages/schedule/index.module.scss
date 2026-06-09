@@ -375,3 +375,70 @@
   border: 2rpx solid transparent;
   box-sizing: border-box;
 }
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.detailLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  min-width: 140rpx;
+}
+
+.detailValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  text-align: right;
+  flex: 1;
+}
+
+.detailSubValue {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  text-align: right;
+  display: block;
+  margin-top: 4rpx;
+}
+
+.statusTag {
+  padding: 6rpx 20rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+}
+
+.pendingStatus {
+  background: rgba(91, 111, 255, 0.1);
+  color: $color-primary;
+}
+
+.completedStatus {
+  background: rgba(82, 196, 26, 0.1);
+  color: $color-success;
+}
+
+.secondaryBtn {
+  flex: 1;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-right: $spacing-sm;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
